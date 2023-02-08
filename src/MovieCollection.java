@@ -8,10 +8,12 @@ public class MovieCollection {
     private ArrayList<Movie> movies;
     private Scanner scanner;
     private static ArrayList<String> allCastMembers = new ArrayList<String>();
+    private static ArrayList<String> allGenres = new ArrayList<String>();
 
     public MovieCollection(String fileName) {
         importMovieList(fileName);
         scanner = new Scanner(System.in);
+       sortResults(movies);
     }
 
     public ArrayList<Movie> getMovies() {
@@ -143,26 +145,11 @@ public class MovieCollection {
 
         // prevent case sensitivity
         searchTerm = searchTerm.toLowerCase();
-        for (int i = 0; i < movies.size(); i++) {
-
-            String castMembers = movies.get(i).getCast();
-
-            if (allCastMembers == null) {
-                for (Movie movie : movies) {
-                    String[] list = movie.getCast().split("|");
-                    for (String string : list) {
-                        if (!allCastMembers.contains(string.toLowerCase())) {
-                            allCastMembers.add(string);
-                        }
-                    }
-                }
+        for (String string : allCastMembers) {
+            if (string.toLowerCase().contains(searchTerm)) {
+                results.add(string);
             }
-                for (String string : allCastMembers) {
-                    if (string.contains(searchTerm)) {
-                        results.add(string);
-                    }
-                }
-            }
+        }
         for (int i = 0; i < results.size(); i++) {
             String castMember = results.get(i);
 
@@ -171,8 +158,22 @@ public class MovieCollection {
 
             System.out.println("" + choiceNum + ". " + castMember);
         }
-        }
+        System.out.print("Select an actor (number): ");
+        String select = scanner.nextLine();
 
+        String chosenActor = results.get(Integer.parseInt(select)-1);
+        int i = 1;
+        for (Movie movie : movies) {
+            if (movie.getCast().contains(chosenActor)) {
+                System.out.println("" + i + ". " + movie.getTitle());
+                i++;
+            }
+        }
+    }
+
+        public static ArrayList<String> returnGenres() {
+        return allGenres;
+        }
         private void searchKeywords() {
             System.out.print("Enter a keyword search term: ");
             String searchTerm = scanner.nextLine();
@@ -221,9 +222,16 @@ public class MovieCollection {
             scanner.nextLine();
         }
 
-        private void listGenres ()
-        {
-
+        private void listGenres () {
+        for (Movie movie : movies) {
+            String[] genres = movie.getGenres().split("\\|");
+            for (String genre : genres) {
+                if (!allGenres.contains(genre)) {
+                    allGenres.add(genre);
+                }
+            }
+        }
+        FileCreator.createFile();
         }
 
         private void listHighestRated ()
@@ -262,6 +270,23 @@ public class MovieCollection {
 
                     Movie nextMovie = new Movie(title, cast, director, tagline, keywords, overview, runtime, genres, userRating, year, revenue);
                     movies.add(nextMovie);
+                }
+                bufferedReader.close();
+            } catch (IOException exception) {
+                // Print out the exception that occurred
+                System.out.println("Unable to access " + exception.getMessage());
+            }
+        }
+
+        public void importCastList(String fileName) {
+            try {
+                FileReader fileReader = new FileReader(fileName);
+                BufferedReader bufferedReader = new BufferedReader(fileReader);
+                String line = bufferedReader.readLine();
+
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    allCastMembers.add(line);
                 }
                 bufferedReader.close();
             } catch (IOException exception) {
