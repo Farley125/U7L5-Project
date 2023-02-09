@@ -5,7 +5,7 @@ import java.io.IOException;
 public class FileCreator {
     public static void createFile() {
         try {
-            File f = new File("src/genres.txt");
+            File f = new File("src/moviesbygenre.txt");
             f.createNewFile();
             FileWriter fw = new FileWriter(f);
             for (String n : MovieCollection.returnGenres()) {

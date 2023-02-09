@@ -3,12 +3,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class MovieCollection {
     private ArrayList<Movie> movies;
     private Scanner scanner;
     private static ArrayList<String> allCastMembers = new ArrayList<String>();
-    private static ArrayList<String> allGenres = new ArrayList<String>();
+    private static String[] allMovieWithGenres = {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", };
+    private final String[] ALLGENRES = {"Thriller", "Action", "Drama", "War", "Comedy", "Romance", "Family", "Fantasy", "Science Fiction", "Crime", "Mystery", "Adventure", "TV Movie", "History", "Horror", "Documentary", "Western", "Music", "Animation", "Foreign"};
 
     public MovieCollection(String fileName) {
         importMovieList(fileName);
@@ -171,8 +173,8 @@ public class MovieCollection {
         }
     }
 
-        public static ArrayList<String> returnGenres() {
-        return allGenres;
+        public static String[] returnGenres() {
+        return allMovieWithGenres;
         }
         private void searchKeywords() {
             System.out.print("Enter a keyword search term: ");
@@ -225,13 +227,35 @@ public class MovieCollection {
         private void listGenres () {
         for (Movie movie : movies) {
             String[] genres = movie.getGenres().split("\\|");
-            for (String genre : genres) {
-                if (!allGenres.contains(genre)) {
-                    allGenres.add(genre);
-                }
+            for (String g : genres) {
+                    switch (g.toLowerCase()) {
+                        case "thriller" -> allMovieWithGenres[0] = allMovieWithGenres[0] + movie.getTitle() + "|";
+                        case "action" -> allMovieWithGenres[1] = allMovieWithGenres[1] + movie.getTitle() + "|";
+                        case "drama" -> allMovieWithGenres[2] = allMovieWithGenres[2] + movie.getTitle() + "|";
+                        case "war" -> allMovieWithGenres[3] = allMovieWithGenres[3] + movie.getTitle() + "|";
+                        case "comedy" -> allMovieWithGenres[4] = allMovieWithGenres[4] + movie.getTitle() + "|";
+                        case "romance" -> allMovieWithGenres[5] = allMovieWithGenres[5] + movie.getTitle() + "|";
+                        case "family" -> allMovieWithGenres[6] = allMovieWithGenres[6] + movie.getTitle() + "|";
+                        case "fantasy" -> allMovieWithGenres[7] = allMovieWithGenres[7] + movie.getTitle() + "|";
+                        case "science fiction" -> allMovieWithGenres[8] = allMovieWithGenres[8] + movie.getTitle() + "|";
+                        case "crime" -> allMovieWithGenres[9] = allMovieWithGenres[9] + movie.getTitle() + "|";
+                        case "mystery" -> allMovieWithGenres[10] = allMovieWithGenres[10] + movie.getTitle() + "|";
+                        case "adventure" -> allMovieWithGenres[11] = allMovieWithGenres[11] + movie.getTitle() + "|";
+                        case "tv movie" -> allMovieWithGenres[12] = allMovieWithGenres[12] + movie.getTitle() + "|";
+                        case "history" -> allMovieWithGenres[13] = allMovieWithGenres[13] + movie.getTitle() + "|";
+                        case "horror" -> allMovieWithGenres[14] =  allMovieWithGenres[14] + movie.getTitle() + "|";
+                        case "documentary" -> allMovieWithGenres[15] = allMovieWithGenres[15] + movie.getTitle() + "|";
+                        case "western" -> allMovieWithGenres[16] = allMovieWithGenres[16] + movie.getTitle() + "|";
+                        case "music" -> allMovieWithGenres[17] = allMovieWithGenres[17] + movie.getTitle() + "|";
+                        case "animation" -> allMovieWithGenres[18] = allMovieWithGenres[18] + movie.getTitle() + "|";
+                        case "foreign" -> allMovieWithGenres[19] = allMovieWithGenres[19] + movie.getTitle() + "|";
+                    }
             }
         }
-        FileCreator.createFile();
+        for (int i = 0; i < allMovieWithGenres.length; i++) {
+            System.out.println(allMovieWithGenres[i]);
+        }
+        //FileCreator.createFile();
         }
 
         private void listHighestRated ()
@@ -294,4 +318,22 @@ public class MovieCollection {
                 System.out.println("Unable to access " + exception.getMessage());
             }
         }
+
+    public void importGenreList(String fileName) {
+        try {
+            FileReader fileReader = new FileReader(fileName);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            int i = 0;
+            while ((bufferedReader.readLine()) != null) {
+                String line = bufferedReader.readLine();
+                ALLGENRES[i] = line;
+                i++;
+                System.out.println("cock");
+            }
+            bufferedReader.close();
+        } catch (IOException exception) {
+            // Print out the exception that occurred
+            System.out.println("Unable to access " + exception.getMessage());
+        }
+    }
     }

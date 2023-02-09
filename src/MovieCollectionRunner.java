@@ -6,6 +6,7 @@ public class MovieCollectionRunner
     {
         MovieCollection myCollection = new MovieCollection("src/movies_data.csv");
         myCollection.importCastList("src/output.txt");
+        //myCollection.importGenreList("src/genres.txt");
         myCollection.menu();
     }
 }
